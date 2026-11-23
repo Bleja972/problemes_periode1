@@ -161,6 +161,28 @@ body::after{background:repeating-linear-gradient(transparent 0px,transparent 5px
 #barArea :is(.val,.total-bar,.targetbar,.transform-segment,.step .res) {color:#fff3ab}
 #barArea :is(.lab,.step strong,.step .calc,.step .inter-question,.step-propose .line1,.compare-question strong) {color:#edf7ff}
 #barArea .compare-question {background:#101e31;border-color:#4b8ca6;color:#edf7ff}
+
+/* Remplissage néon sur toute la barre, puis une impulsion à son apparition. */
+#barArea :is(.part,.total-bar,.transform-segment,.targetbar,.mini-card) {
+  background:linear-gradient(180deg,
+    color-mix(in srgb,var(--bar-glow) 68%,white) 0%,
+    var(--bar-glow) 42%,
+    color-mix(in srgb,var(--bar-glow) 84%,#18213a) 100%);
+  color:#081323;
+  box-shadow:inset 0 2px 0 #ffffff9c,inset 0 -3px 0 #08132355,
+    0 0 12px color-mix(in srgb,var(--bar-glow) 65%,transparent);
+  animation:bar-arcade-entry .42s ease-out both;
+}
+#barArea :is(.part .val,.part .lab,.total-bar,.targetbar,.transform-segment) {
+  color:#081323;
+  text-shadow:none;
+}
+#barArea .part .lab {font-weight:750}
+@keyframes bar-arcade-entry {
+  from {opacity:.55;filter:brightness(.76)}
+  60% {filter:brightness(1.18)}
+  to {opacity:1;filter:brightness(1)}
+}
 </style>
 </head>
 <body>
