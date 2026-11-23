@@ -133,6 +133,34 @@ body::after{background:repeating-linear-gradient(transparent 0px,transparent 5px
 .mast a {text-decoration:none}
 #gamePage .preview-intro {margin:0}
 #gamePage .sub {color:#a5dbe9}
+
+/* Modèles en barres : couleurs distinctes, chiffres et légendes contrastés. */
+#barArea :is(.part,.total-bar,.transform-segment,.targetbar,.mini-card,.step,.step-propose) {
+  --bar-glow:#57e8ff;
+  --bar-fill:#123044;
+  background:linear-gradient(155deg,var(--bar-fill),#080f1b);
+  color:#f6fbff;
+  border-color:var(--bar-glow);
+  box-shadow:inset 0 0 9px color-mix(in srgb,var(--bar-glow) 19%,transparent),
+    0 0 7px color-mix(in srgb,var(--bar-glow) 32%,transparent);
+}
+#barArea .part {border:1px solid var(--bar-glow)}
+#barArea .part:last-child {border-right:1px solid var(--bar-glow)}
+#barArea :is(.part.blue,.transform-initial) {--bar-glow:#78aaff;--bar-fill:#172c54}
+#barArea :is(.part.red,.transform-removed,.step.minus,.step-propose.minus,.mini-card) {--bar-glow:#ff7489;--bar-fill:#431c32}
+#barArea :is(.part.green,.transform-added,.step.plus,.step-propose.plus) {--bar-glow:#5df3ac;--bar-fill:#103b32}
+#barArea .part.lime {--bar-glow:#adf75e;--bar-fill:#283d22}
+#barArea :is(.part.yellow,.targetbar) {--bar-glow:#ffe173;--bar-fill:#443819}
+#barArea .part.orangefill {--bar-glow:#ffac69;--bar-fill:#472c1a}
+#barArea .part.pink {--bar-glow:#ff8ed9;--bar-fill:#432242}
+#barArea .part.purple {--bar-glow:#cb9bff;--bar-fill:#332550}
+#barArea .part.brown {--bar-glow:#e6aa88;--bar-fill:#3b2929}
+#barArea .part.beige {--bar-glow:#ffdfad;--bar-fill:#403329}
+#barArea .part.gray {--bar-glow:#bdc8e2;--bar-fill:#283444}
+#barArea .transform-removed::after {border-color:#ff7489}
+#barArea :is(.val,.total-bar,.targetbar,.transform-segment,.step .res) {color:#fff3ab}
+#barArea :is(.lab,.step strong,.step .calc,.step .inter-question,.step-propose .line1,.compare-question strong) {color:#edf7ff}
+#barArea .compare-question {background:#101e31;border-color:#4b8ca6;color:#edf7ff}
 </style>
 </head>
 <body>
