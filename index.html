@@ -183,6 +183,32 @@ body::after{background:repeating-linear-gradient(transparent 0px,transparent 5px
   60% {filter:brightness(1.18)}
   to {opacity:1;filter:brightness(1)}
 }
+
+#gamePage #problemText {
+  color:#ffe675;
+  font-size:clamp(1.25rem,2.1vw,1.7rem);
+  line-height:1.6;
+  font-weight:750;
+}
+#barArea .bar-model {min-width:0}
+#barArea :is(.parts,.total-bar) {width:100%}
+#barArea .part {
+  flex:0 0 auto;
+  min-width:0;
+  padding:6px 0;
+  overflow-wrap:anywhere;
+}
+#barArea .part .lab {
+  max-width:100%;
+  padding-inline:2px;
+}
+#barArea .transform-track {min-width:0}
+#barArea .transform-segment {flex:0 0 auto;min-width:0}
+#barArea .part .val,#barArea .transform-segment {font-size:clamp(.82rem,2.45vw,1.35rem)}
+#barArea .compare-row .bar-model {justify-self:start}
+@media(max-width:700px) {
+  #barArea .compare-wide .compare-row {grid-template-columns:minmax(0,1fr)}
+}
 </style>
 </head>
 <body>
@@ -329,15 +355,16 @@ function proportionalParts(total,parts){
     return parts.map(()=>100/parts.length);
   }
 
-  return vals.map(v=>(v/reference)*100);
+  const sum=vals.reduce((a,b)=>a+b,0);
+  return sum>0 ? vals.map(v=>v/sum*100) : parts.map(()=>100/parts.length);
 }
-function partsBar(total,parts){
+function partsBar(total,parts,scale=100){
   const ordered=orderParts(parts);
   const widths=proportionalParts(total,ordered);
-  return `<div class="bar-model">
+  return `<div class="bar-model" style="width:${scale}%">
     <div class="total-label">Le Tout</div>
     <div class="total-bar">${esc(total)}</div>
-    <div class="parts">${ordered.map((p,i)=>`<div class="part ${getPartClass(p[1],i)}" style="width:${widths[i].toFixed(2)}%"><div class="val">${esc(p[0])}</div><div class="lab">${esc(p[1])}</div></div>`).join('')}</div>
+    <div class="parts">${ordered.map((p,i)=>`<div class="part ${getPartClass(p[1],i)}" style="width:${widths[i]}%"><div class="val">${esc(p[0])}</div><div class="lab">${esc(p[1])}</div></div>`).join('')}</div>
   </div>`;
 }
 
@@ -489,7 +516,11 @@ if(p.kind==='parts')return partsBar(p.total,p.parts);
 if(p.kind==='changePlus')return renderTransformation(p,true);
 if(p.kind==='changeMinus')return renderTransformation(p,false);
 if(p.kind==='sequence')return renderTwoStepQuestions(p);
-if(p.kind==='compare')return `<div class="compare-wide"><div class="compare-grid">${p.bars.map(b=>`<div class="compare-row"><div class="compare-name">${esc(b[0])}</div>${partsBar('?',b[1])}</div>`).join('')}</div>${renderCompareQuestions(p)}</div>`;
+if(p.kind==='compare'){
+  const totals=p.bars.map(([,parts])=>parts.reduce((sum,[value])=>sum+(numberValue(value)||0),0));
+  const max=Math.max(...totals,1);
+  return `<div class="compare-wide"><div class="compare-grid">${p.bars.map((b,i)=>`<div class="compare-row"><div class="compare-name">${esc(b[0])}</div>${partsBar('?',b[1],100*totals[i]/max)}</div>`).join('')}</div>${renderCompareQuestions(p)}</div>`;
+}
 if(p.kind==='compareSeq')return `<div class="compare-wide"><div class="compare-grid">${p.bars.map(b=>{const cls=String(b[1]).includes('−')?'minus':'plus';return `<div class="step ${cls}" style="width:100%"><strong>${esc(b[0])}</strong><div class="calc"></div><div class="res"></div></div>`}).join('')}</div>${renderCompareQuestions(p)}</div>`;
 if(p.kind==='target')return `<div class="target"><div class="total-label">Objectif</div><div class="targetbar">${esc(p.target)} points</div><div class="cards">${p.cards.map(c=>`<span class="mini-card">${esc(c)}</span>`).join('')}</div></div>`;
 return '';
