@@ -188,6 +188,8 @@ body::after{background:repeating-linear-gradient(transparent 0px,transparent 5px
 }
 #barArea .bar-model {min-width:0}
 #barArea :is(.parts,.total-bar) {width:100%}
+/* Les segments colorés épousent les bords extérieurs du modèle. */
+#barArea .parts {border:0}
 #barArea .part {
   flex:0 0 auto;
   min-width:0;
