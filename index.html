@@ -210,6 +210,7 @@ body::after{background:repeating-linear-gradient(transparent 0px,transparent 5px
 #barArea .transform-segment {flex:0 0 auto;min-width:0}
 #barArea .part .val,#barArea .transform-segment {font-size:clamp(.82rem,2.45vw,1.35rem)}
 #barArea .compare-row .bar-model {justify-self:start}
+#barArea .compare-zoe .total-bar {--bar-glow:#cb9bff}
 @media(max-width:700px) {
   #barArea .compare-wide .compare-row {grid-template-columns:minmax(0,1fr)}
 }
@@ -523,7 +524,7 @@ if(p.kind==='sequence')return renderTwoStepQuestions(p);
 if(p.kind==='compare'){
   const totals=p.bars.map(([,parts])=>parts.reduce((sum,[value])=>sum+(numberValue(value)||0),0));
   const max=Math.max(...totals,1);
-  return `<div class="compare-wide"><div class="compare-grid">${p.bars.map((b,i)=>`<div class="compare-row"><div class="compare-name">${esc(b[0])}</div>${partsBar('?',b[1],100*totals[i]/max)}</div>`).join('')}</div>${renderCompareQuestions(p)}</div>`;
+  return `<div class="compare-wide"><div class="compare-grid">${p.bars.map((b,i)=>`<div class="compare-row${normalizeLabel(b[0]) === "zoe" ? " compare-zoe" : ""}"><div class="compare-name">${esc(b[0])}</div>${partsBar('?',b[1],100*totals[i]/max)}</div>`).join('')}</div>${renderCompareQuestions(p)}</div>`;
 }
 if(p.kind==='compareSeq')return `<div class="compare-wide"><div class="compare-grid">${p.bars.map(b=>{const cls=String(b[1]).includes('−')?'minus':'plus';return `<div class="step ${cls}" style="width:100%"><strong>${esc(b[0])}</strong><div class="calc"></div><div class="res"></div></div>`}).join('')}</div>${renderCompareQuestions(p)}</div>`;
 if(p.kind==='target')return `<div class="target"><div class="total-label">Objectif</div><div class="targetbar">${esc(p.target)} points</div><div class="cards">${p.cards.map(c=>`<span class="mini-card">${esc(c)}</span>`).join('')}</div></div>`;
